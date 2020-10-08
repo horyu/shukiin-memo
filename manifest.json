@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+  "name": "SHUKIIN-MEMO",
+  "version": "1.0",
+  "description": "設定した曜日にChromeが起動されていたら、自動で https://shukiin.com/timecard を開き、当日のメモの項目に設定したテキストを入力します。",
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://shukiin.com/timecard"
+      ],
+      "js": [
+        "timecard.js"
+      ]
+    }
+  ],
+  "icons": {
+    "32": "icons/32x32.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "options_page": "options.html"
+}

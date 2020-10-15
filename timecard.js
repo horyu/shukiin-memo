@@ -1,6 +1,7 @@
-const lastAccessKey = 'lastAccess';
+const hash = '#shukiin-memo'
 
-const [todayDateString, dayNumKey] = ((d) => {
-  return [d.toDateString(), d.getDay().toString()]
-})(new Date());
+if (location.hash !== hash) {
+  return;
+}
 
+console.log("set Memo");

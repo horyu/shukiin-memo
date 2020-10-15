@@ -1,4 +1,6 @@
 const lastAccessKey = 'lastAccess';
+const hash = '#shukiin-memo'
+const timecardURLwithHash = 'https://shukiin.com/timecard' + hash;
 
 // 1分毎にイベントを発火
 chrome.alarms.create('shukiinMemoEvent', {
@@ -15,7 +17,7 @@ function update_last_access() {
 }
 
 function open_timecard() {
-  console.log("open_timecard");
+  window.open(timecardURLwithHash);
 }
 
 chrome.alarms.onAlarm.addListener((_alarm) => {

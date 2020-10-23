@@ -1,20 +1,18 @@
 const textId = 'text';
 const hash = '#shukiin-memo'
 
-let text;
-
-function set_text() {
-  let text = null;
+function load_text() {
   chrome.storage.sync.get(textId, (items) => {
     console.log('load:', items);
     Object.entries(items).forEach(([_id, value]) => {
       text = value;
     });
+    start_observer(text);
   });
 }
 
 // メモ帳はモーダルでじっくり出現するので、MutationObserverで監視してtextを設定する
-function start_observer() {
+function start_observer(text) {
   const noteModalDiv = document.getElementById('timecard-edit-note-modal');
   const textarea = noteModalDiv.querySelector('textarea[name="note"]');
   const observer = new MutationObserver(() => {
@@ -23,15 +21,17 @@ function start_observer() {
       console.log('set memo:', text);
       noteModalDiv.querySelector('button').focus();
       observer.disconnect();
+      console.log('finish observer');
     }
   });
   const config = {
     attributes: true
   };
   observer.observe(noteModalDiv, config);
+  console.log('start observer');
 }
 
-function clickMemo() {
+function click_memo() {
   const dateString = (d => `${d.getMonth() + 1}/${d.getDate()}`)(new Date());
   const tds = Array.from(document.querySelectorAll('td.js-date-column'));
   const td = tds.find(td => td.textContent.startsWith(dateString));
@@ -46,10 +46,9 @@ function clickMemo() {
 }
 
 if (location.hash === hash) {
-  set_text();
-  start_observer();
+  load_text();
   const intervalId = setInterval(() => {
-    if (clickMemo()) {
+    if (click_memo()) {
       clearInterval(intervalId);
     }
   }, 100);

@@ -12,6 +12,7 @@ function save_options() {
   chrome.storage.sync.set(obj, () => {
     console.log('save:', obj);
   });
+  window.alert('現在の設定を保存しました');
  }
  
  function restore_options() {

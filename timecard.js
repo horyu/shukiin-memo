@@ -1,55 +1,59 @@
 const textId = 'text';
 const hash = '#shukiin-memo'
 
-function load_text() {
+function init() {
   chrome.storage.sync.get(textId, (items) => {
     console.log('load:', items);
     Object.entries(items).forEach(([_id, value]) => {
-      text = value;
+      start_modal_observer(value);
     });
-    start_observer(text);
+    start_main_observer();
   });
 }
 
-// メモ帳はモーダルでじっくり出現するので、MutationObserverで監視してtextを設定する
-function start_observer(text) {
+// MutationObserverで監視してtextを設定する
+function start_modal_observer(text) {
   const noteModalDiv = document.getElementById('timecard-edit-note-modal');
   const textarea = noteModalDiv.querySelector('textarea[name="note"]');
   const observer = new MutationObserver(() => {
+    console.log('find textarea[name="note"]');
     if (textarea.value === '') {
       textarea.value = text;
       console.log('set memo:', text);
       noteModalDiv.querySelector('button').focus();
-      observer.disconnect();
-      console.log('finish observer');
+    }
+    observer.disconnect();
+  });
+  const config = { attributes: true };
+  observer.observe(noteModalDiv, config);
+  console.log('wait for textarea[name="note"]');
+}
+
+// MutationObserverでメモを開くaタグの出現を待ってクリックする
+function start_main_observer() {
+  const mainDiv = document.getElementById('main');
+  const dateString = (d => `${d.getMonth() + 1}/${d.getDate()}`)(new Date());
+  const observer = new MutationObserver(() => {
+    const tds = Array.from(document.querySelectorAll('td.js-date-column'));
+    const td = tds.find(td => td.textContent.startsWith(dateString));
+    if (td) {
+      const tr = td.closest('tr');
+      const a = tr && tr.querySelector('a.js-show-edit-note');
+      if (a) {
+        console.log('find a.js-show-edit-note');
+        a.click();
+        observer.disconnect();
+      }
     }
   });
   const config = {
-    attributes: true
+    childList: true,
+    subtree: true 
   };
-  observer.observe(noteModalDiv, config);
-  console.log('start observer');
-}
-
-function click_memo() {
-  const dateString = (d => `${d.getMonth() + 1}/${d.getDate()}`)(new Date());
-  const tds = Array.from(document.querySelectorAll('td.js-date-column'));
-  const td = tds.find(td => td.textContent.startsWith(dateString));
-  if (td) {
-    const tr = td.closest('tr');
-    const a = tr.querySelector('a.js-show-edit-note');
-    if (a) {
-      a.click();
-      return true;
-    }
-  }
+  observer.observe(mainDiv, config);
+  console.log('wait for a.js-show-edit-note');
 }
 
 if (location.hash === hash) {
-  load_text();
-  const intervalId = setInterval(() => {
-    if (click_memo()) {
-      clearInterval(intervalId);
-    }
-  }, 100);
+  init();
 }

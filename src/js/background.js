@@ -1,6 +1,6 @@
-const lastAccessKey = 'lastAccess';
-const hash = '#shukiin-memo'
-const timecardURLwithHash = 'https://shukiin.com/timecard' + hash;
+import { TIMECARD_URL_WITH_HASH } from "./consts.js";
+
+const LAST_ACCESS_KEY = 'lastAccess';
 
 // 1分毎にイベントを発火
 chrome.alarms.create('shukiinMemoEvent', {
@@ -10,24 +10,24 @@ chrome.alarms.create('shukiinMemoEvent', {
 
 function update_last_access() {
   const todayDateString = (new Date()).toDateString();
-  const obj = { [lastAccessKey]: todayDateString };
+  const obj = { [LAST_ACCESS_KEY]: todayDateString };
   chrome.storage.sync.set(obj, () => {
     console.log('save:', obj);
   });
 }
 
 function open_timecard() {
-  window.open(timecardURLwithHash);
+  window.open(TIMECARD_URL_WITH_HASH);
 }
 
 chrome.alarms.onAlarm.addListener((_alarm) => {
-  const [todayDateString, dayNumKey] = ((d) => {
+  const [todayDateString, dateKey] = ((d) => {
     return [d.toDateString(), d.getDay().toString()]
   })(new Date());
-  chrome.storage.sync.get([lastAccessKey, dayNumKey], (obj) => {
-    if (obj[lastAccessKey] !== todayDateString) {
+  chrome.storage.sync.get([LAST_ACCESS_KEY, dateKey], (obj) => {
+    if (obj[LAST_ACCESS_KEY] !== todayDateString) {
       update_last_access();
-      if (obj[dayNumKey]) {
+      if (obj[dateKey]) {
         open_timecard();
       }
     }

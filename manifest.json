@@ -4,9 +4,7 @@
   "version": "1.0",
   "description": "設定した曜日にChromeが起動されていたら、自動で https://shukiin.com/timecard を開き、当日のメモの項目に設定したテキストを入力します。",
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "page": "src/html/background.html"
   },
   "content_scripts": [
     {
@@ -14,9 +12,12 @@
         "https://shukiin.com/timecard"
       ],
       "js": [
-        "timecard.js"
+        "src/js/content_script.js"
       ]
     }
+  ],
+  "web_accessible_resources": [
+    "src/js/*"
   ],
   "icons": {
     "32": "icons/32x32.png"
@@ -25,5 +26,5 @@
     "alarms",
     "storage"
   ],
-  "options_page": "options.html"
+  "options_page": "src/html/options.html"
 }

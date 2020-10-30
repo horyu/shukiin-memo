@@ -1,8 +1,7 @@
-const textId = 'text';
-const hash = '#shukiin-memo'
+import { MEMO_TEXT_ID, TIMECARD_URL_WITH_HASH } from "./consts.js";
 
 function init() {
-  chrome.storage.sync.get(textId, (items) => {
+  chrome.storage.sync.get(MEMO_TEXT_ID, (items) => {
     console.log('load:', items);
     Object.entries(items).forEach(([_id, value]) => {
       start_modal_observer(value);
@@ -54,6 +53,8 @@ function start_main_observer() {
   console.log('wait for a.js-show-edit-note');
 }
 
-if (location.hash === hash) {
-  init();
+export function main() {
+  if (location.href === TIMECARD_URL_WITH_HASH) {
+    init();
+  }
 }

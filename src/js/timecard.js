@@ -47,7 +47,7 @@ function start_main_observer() {
   });
   const config = {
     childList: true,
-    subtree: true 
+    subtree: true
   };
   observer.observe(mainDiv, config);
   console.log('wait for a.js-show-edit-note');

@@ -1,2 +1,2 @@
-export const MEMO_TEXT_ID = 'memo-text';
-export const TIMECARD_URL_WITH_HASH = 'https://shukiin.com/timecard#shukiin-memo';
+export const MEMO_TEXT_KEY = 'memo-text';
+export const EXECUTION_DATE_KEY = 'execution-date';

@@ -1,6 +1,6 @@
 'use strict';
 // https://note.com/masarusuzuki/n/n4a3771029d52
-import { MEMO_TEXT_ID } from "./consts.js";
+import { MEMO_TEXT_KEY } from "./consts.js";
 
 const OPTION_HTML_TEXTAREA_ID = 'option-html-textarea';
 const OPTION_HTML_DATE_ID_PREFIX = 'option-html-date-';
@@ -14,7 +14,7 @@ function restore_options() {
       document.getElementById(OPTION_HTML_DATE_ID_PREFIX + id).checked = checked;
     });
   });
-  chrome.storage.sync.get(MEMO_TEXT_ID, (items) => {
+  chrome.storage.sync.get(MEMO_TEXT_KEY, (items) => {
     console.log('load:', items);
     Object.entries(items).forEach(([id, value]) => {
       document.getElementById(OPTION_HTML_TEXTAREA_ID).value = value;
@@ -23,7 +23,7 @@ function restore_options() {
 }
 
 function save_options() {
-  const obj = { [MEMO_TEXT_ID]: document.getElementById(OPTION_HTML_TEXTAREA_ID).value };
+  const obj = { [MEMO_TEXT_KEY]: document.getElementById(OPTION_HTML_TEXTAREA_ID).value };
   dateIds.forEach(id => {
     obj[id] = document.getElementById(OPTION_HTML_DATE_ID_PREFIX + id).checked;
   });

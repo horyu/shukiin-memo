@@ -1,7 +1,7 @@
-import { MEMO_TEXT_ID, TIMECARD_URL_WITH_HASH } from "./consts.js";
+import { MEMO_TEXT_KEY, EXECUTION_DATE_KEY } from "./consts.js";
 
 function init() {
-  chrome.storage.sync.get(MEMO_TEXT_ID, (items) => {
+  chrome.storage.sync.get(MEMO_TEXT_KEY, (items) => {
     console.log('load:', items);
     Object.entries(items).forEach(([_id, value]) => {
       start_modal_observer(value);
@@ -54,7 +54,13 @@ function start_main_observer() {
 }
 
 export function main() {
-  if (location.href === TIMECARD_URL_WITH_HASH) {
-    init();
-  }
+  const todayDateString = (new Date()).toDateString();
+  chrome.storage.sync.get(EXECUTION_DATE_KEY, (obj) => {
+    if (obj[EXECUTION_DATE_KEY] === todayDateString) {
+      init();
+      chrome.storage.sync.remove(EXECUTION_DATE_KEY, () => {
+        console.log('remove:', EXECUTION_DATE_KEY);
+      })
+    }
+  });
 }

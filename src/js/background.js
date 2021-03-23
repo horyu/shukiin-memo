@@ -34,7 +34,7 @@ chrome.alarms.onAlarm.addListener((_alarm) => {
       update_last_alarm_date();
       if (obj[dateKey]) {
         update_execution_date(todayDateString, () => {
-          window.open(TIMECARD_URL);
+          chrome.tabs.create({ url: TIMECARD_URL });
         })
       }
     }

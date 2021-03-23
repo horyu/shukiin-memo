@@ -26,7 +26,8 @@
   },
   "permissions": [
     "alarms",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "options_page": "src/html/options.html"
 }

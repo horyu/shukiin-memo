@@ -31,9 +31,12 @@ chrome.alarms.onAlarm.addListener((_alarm) => {
   })(new Date());
   chrome.storage.sync.get([LAST_ALARM_DATE_KEY, dateKey], (obj) => {
     if (obj[LAST_ALARM_DATE_KEY] !== todayDateString) {
+      console.log(new Date(), 'update_last_alarm_date');
       update_last_alarm_date();
       if (obj[dateKey]) {
+        console.log(new Date(), 'update_execution_date');
         update_execution_date(todayDateString, () => {
+          console.log(new Date(), 'chrome.tabs.create({ url: TIMECARD_URL })');
           chrome.tabs.create({ url: TIMECARD_URL });
         })
       }

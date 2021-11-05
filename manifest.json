@@ -13,7 +13,8 @@
       ],
       "js": [
         "src/js/content_script.js"
-      ]
+      ],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
